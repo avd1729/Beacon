@@ -1,7 +1,11 @@
 [project]
-name = "p2p"
+name = "beacon"
 version = "0.1.0"
-description = "Add your description here"
+description = "Beacon is a peer-to-peer file sharing network that enables direct, encrypted communication between peers without relying on centralized servers. It combines TCP sockets, a bootstrap discovery service, and symmetric encryption to create a lightweight yet secure sharing mesh."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+
+dependencies = [
+  "requests",
+  "python-dotenv",
+]
