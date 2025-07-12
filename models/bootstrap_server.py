@@ -1,0 +1,2 @@
+class BootstrapServer:
+    pass
