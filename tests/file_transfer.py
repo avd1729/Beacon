@@ -9,8 +9,7 @@ def run_driver():
     peer2.start_server()
 
     time.sleep(1)
-
-    # Hardcoded file path
+    
     filepath = "docs/sample.txt"
 
     print("\n Peer-to-Peer File Sharing Test")

@@ -10,7 +10,7 @@ def run_driver():
 
     time.sleep(1)
 
-    print("\n🧪 Peer-to-Peer Chat Test")
+    print("\n Peer-to-Peer Chat Test")
     print("1. Peer1 connects to Peer2")
     print("2. Peer2 connects to Peer1")
     choice = input("Choose connection direction (1 or 2): ")
@@ -22,5 +22,5 @@ def run_driver():
     else:
         print("Invalid choice.")
 
-if __name__ == "__main__":
-    run_driver()
+
+run_driver()
