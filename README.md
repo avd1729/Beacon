@@ -2,7 +2,7 @@
 
 ## The Motivation
 
-This project started as an experiment in **learning TCP sockets, networking, and system-level programming**. Instead of following a tutorial blindly, we chose to **build a fully functional Peer-to-Peer (P2P) network** from scratch — with a practical goal: **sending files between peers without a central server managing transfers**.
+This project started as an experiment in **learning TCP sockets, networking, and system-level programming**. Instead of following a tutorial blindly, I chose to **build a fully functional Peer-to-Peer (P2P) network** from scratch — with a practical goal: **sending files between peers without a central server managing transfers**.
 The goal wasn't to just share files — it was to **understand how decentralized systems operate**, how low-level protocols behave, and what architectural trade-offs emerge in real-time development.
 
 
