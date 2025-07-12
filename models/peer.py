@@ -1,5 +1,11 @@
 import socket
 import threading
+import requests
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+bootstrap_server_url = os.getenv("BOOTSTRAP_SERVER_URL")
 
 class Peer:
     def __init__(self, ip, port):
@@ -42,3 +48,16 @@ class Peer:
                 client.send(msg.encode())
         except Exception as e:
             print(f"[Connection failed]: {e}")
+
+    def register_as_peer(self):
+        peer_data = {
+            "ip" : self.ip,
+            "port" : self.port
+        }
+        try:
+            response = requests.post(bootstrap_server_url, json=peer_data)
+            print("Status Code:", response.status_code)
+            print("Response JSON:", response.json())
+        except requests.exceptions.RequestException as e:
+            print("Error communicating with bootstrap server:", e)
+
