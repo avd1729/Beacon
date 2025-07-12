@@ -102,19 +102,47 @@ class Peer:
         except requests.exceptions.RequestException as e:
             print("Error communicating with bootstrap server:", e)
 
-    def get_all_peers(self):
+    @classmethod
+    def get_all_peers(cls):
         try:
             response = requests.get(bootstrap_server_url + "/api/get_peers")
             print("Status Code:", response.status_code)
             
             if response.status_code == 200:
                 data = response.json()
-                print("Received Peers List:")
-                for peer in data.get("peers", []):
-                    print(f"IP: {peer['ip']}, Port: {peer['port']}")
+                return data
             else:
                 print("Failed to retrieve peers.")
-
         except requests.exceptions.RequestException as e:
             print("Error:", e)
+        return {"peers": []}
+
+    def discover_and_connect(self):
+        peers = Peer.get_all_peers()
+
+        for peer in peers.get("peers", []):
+            try:
+                peer_ip = peer["ip"]
+                peer_port = int(peer["port"])
+
+                if peer_ip == self.ip and peer_port == self.port:
+                    continue
+
+                client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                client.settimeout(1.0)
+
+                client.connect((peer_ip, peer_port))
+                print(f"[Peer {peer_ip}:{peer_port} is UP]")
+
+                # # Optional: Send a lightweight ping (as a header)
+                # header = json.dumps({"type": "ping"}).encode() + b"\n"
+                # client.sendall(header)
+
+                client.close()
+
+            except Exception as e:
+                print(f"[Peer {peer['ip']}:{peer['port']} is DOWN] Reason: {e}")
+
+
+
 
