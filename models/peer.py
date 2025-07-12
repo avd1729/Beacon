@@ -55,9 +55,25 @@ class Peer:
             "port" : self.port
         }
         try:
-            response = requests.post(bootstrap_server_url, json=peer_data)
+            response = requests.post(bootstrap_server_url + "/api/register", json=peer_data)
             print("Status Code:", response.status_code)
             print("Response JSON:", response.json())
         except requests.exceptions.RequestException as e:
             print("Error communicating with bootstrap server:", e)
+
+    def get_all_peers(self):
+        try:
+            response = requests.get(bootstrap_server_url + "/api/get_peers")
+            print("Status Code:", response.status_code)
+            
+            if response.status_code == 200:
+                data = response.json()
+                print("Received Peers List:")
+                for peer in data.get("peers", []):
+                    print(f"IP: {peer['ip']}, Port: {peer['port']}")
+            else:
+                print("Failed to retrieve peers.")
+
+        except requests.exceptions.RequestException as e:
+            print("Error:", e)
 

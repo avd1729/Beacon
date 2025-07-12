@@ -9,7 +9,32 @@ cursor = conn.cursor()
 class BootstrapServer(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/api/get_peers':
-            pass
+            try:
+                # Connect and query the database
+                with sqlite3.connect('db/peer_registry.db') as conn:
+                    cursor = conn.cursor()
+                    cursor.execute('SELECT ip, port FROM peers')
+                    rows = cursor.fetchall()
+
+                # Convert to list of dictionaries
+                peer_list = [{"ip": row[0], "port": row[1]} for row in rows]
+
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(f'Database error: {e}'.encode())
+                return
+
+            # Send JSON response
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps({"peers": peer_list}).encode())
+        else:
+            self.send_response(404)
+            self.end_headers()
+            self.wfile.write(b'Not Found')
+
 
     def do_POST(self):
         if self.path == '/api/register':
@@ -48,11 +73,3 @@ class BootstrapServer(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
             self.wfile.write(b'Not Found')
-
-def run_server():
-    print("Bootstrap server running on port 8000...")
-    server = HTTPServer(('0.0.0.0', 8000), BootstrapServer)
-    server.serve_forever()
-
-if __name__ == '__main__':
-    run_server()
